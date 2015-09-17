@@ -33,7 +33,7 @@ function Plugin(crawler) {
     });
 
     this.crawler.on("error", function(error, uri) {
-       error.push(error);
+       self.data.errors.push(error);
     });
 
 
