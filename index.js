@@ -43,6 +43,10 @@ var DEFAULT_REFERER = false;
 var DEFAULT_STORE_MODULE = "./memory-store.js";
 var DEFAULT_QUEUE_MODULE = "./async-queue.js";
 
+// Adding default for depth and parent URI
+var CURRENT_DEPTH = 0;
+var PARENT_URI = "";
+
 (function () {
 
 
@@ -222,7 +226,7 @@ function addInQueue(options) {
           if (requestQueue.idle()){
             endCallback();
           }
-        });         
+        });
     });
   });
 
@@ -303,8 +307,9 @@ function createDefaultOptions(url) {
       retry400                : DEFAULT_RETRY_400,
       isExternal              : false,
       storeModuleName         : DEFAULT_STORE_MODULE,
-      queueModuleName         : DEFAULT_QUEUE_MODULE
-
+      queueModuleName         : DEFAULT_QUEUE_MODULE,
+      currentDepth            : CURRENT_DEPTH,
+      parentUri               : PARENT_URI
   };
 
   if (url) {
@@ -642,6 +647,8 @@ function addLinkToQueue(result, parentUri, linkUri, anchor, isDoFollow, endCallb
 
               if (info.toCrawl && (result.depthLimit === -1 || currentDepth <= result.depthLimit)) {
                   result.isExternal = info.isExternal;
+                  result.currentDepth = currentDepth;
+                  result.parentUri = parentUri;
                   requestQueue.queue(buildNewOptions(result,linkUri), callback);
 
               }
