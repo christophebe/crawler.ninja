@@ -11,7 +11,7 @@ log.level("debug");
 
 var proxyListTest = null;
 
-describe('Memory leaks', function() {
+describe.skip('Memory leaks', function() {
 
         before(function(done) {
           var proxyFile = "./test/proxies-all.txt";
@@ -34,7 +34,7 @@ describe('Memory leaks', function() {
 
           });
         });
-        it.skip('should crawl a big site without memory leaks', function(done) {
+        it('should crawl a big site without memory leaks', function(done) {
             this.timeout(3000000);
             /*
             setInterval(function(){
