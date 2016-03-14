@@ -496,3 +496,4 @@ ChangeLog
 0.2.4
 - Code refactoring : remove the attribute uri. Use only url in the options object & functions.
 - Code refactoring : rename parentUri by parentUrl.
+- Invalid output in the console plugin : the http method was not correctly displayed.
