@@ -23,7 +23,7 @@ function Plugin(crawler) {
     };
 }
 
-Plugin.prototype.unCrawl = function(parentUri, linkUri, anchor, isDoFollow, callback) {
+Plugin.prototype.unCrawl = function(parentUrl, linkUri, anchor, isDoFollow, callback) {
       this.data.numberOfUncrawlUrls++;
       callback();
 };

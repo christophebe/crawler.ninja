@@ -444,17 +444,17 @@ function crawlHrefs(result, $, endCallback) {
 function crawlHref($,result, a, callback) {
 
       var link = $(a).attr('href');
-      var parentUri = result.url;
+      var parentUrl = result.url;
       if (link) {
 
         var anchor = $(a).text() ? $(a).text() : "";
         var noFollow = $(a).attr("rel");
         var isDoFollow =  ! (noFollow && noFollow === "nofollow");
 
-        var linkUri = URI.linkToURI(parentUri, link);
+        var linkUri = URI.linkToURI(parentUrl, link);
 
-        pm.crawlLink(parentUri, linkUri, anchor, isDoFollow, function(){
-          addLinkToQueue(result, parentUri, linkUri, anchor, isDoFollow, callback);
+        pm.crawlLink(parentUrl, linkUri, anchor, isDoFollow, function(){
+          addLinkToQueue(result, parentUrl, linkUri, anchor, isDoFollow, callback);
         });
 
       }
@@ -497,17 +497,17 @@ function crawlLinks(result, $, endCallback) {
  */
 function crawLink($,result,linkTag, callback) {
       var link = $(linkTag).attr('href');
-      var parentUri = result.url;
+      var parentUrl = result.url;
 
       if (link) {
 
           var rel =  $(linkTag).attr('rel');
 
           if (result.linkTypes.indexOf(rel) > 0) {
-              var linkUri = URI.linkToURI(parentUri, link);
+              var linkUri = URI.linkToURI(parentUrl, link);
 
-              pm.crawlLink(parentUri, linkUri, null, null, function(){
-                addLinkToQueue(result, parentUri, linkUri, null, null, callback);
+              pm.crawlLink(parentUrl, linkUri, null, null, function(){
+                addLinkToQueue(result, parentUrl, linkUri, null, null, callback);
               });
           }
           else {
@@ -552,12 +552,12 @@ function crawlScripts(result, $, endCallback) {
 function crawlScript($,result, script, callback) {
 
     var link = $(script).attr('src');
-    var parentUri = result.url;
+    var parentUrl = result.url;
 
     if (link) {
-          var linkUri = URI.linkToURI(parentUri, link);
-          pm.crawlLink(parentUri, linkUri, null, null, function(){
-            addLinkToQueue(result, parentUri, linkUri, null, null, callback);
+          var linkUri = URI.linkToURI(parentUrl, link);
+          pm.crawlLink(parentUrl, linkUri, null, null, function(){
+            addLinkToQueue(result, parentUrl, linkUri, null, null, callback);
           });
     }
     else {
@@ -598,14 +598,14 @@ function crawlImages(result, $, endCallback) {
  * @param callback()
  */
 function crawlImage ($,result, img, callback) {
-      var parentUri = result.url;
+      var parentUrl = result.url;
 
       var link = $(img).attr('src');
       var alt = $(img).attr('alt');
       if (link) {
-          var linkUri = URI.linkToURI(parentUri, link);
-          pm.crawlImage(parentUri, linkUri, alt, function(){
-            addLinkToQueue(result, parentUri, linkUri, null, null, callback);
+          var linkUri = URI.linkToURI(parentUrl, link);
+          pm.crawlImage(parentUrl, linkUri, alt, function(){
+            addLinkToQueue(result, parentUrl, linkUri, null, null, callback);
           });
       }
       else {
@@ -623,17 +623,17 @@ function crawlImage ($,result, img, callback) {
  * @param true if the link is in dofollow
  * @param callback(error)
  */
-function addLinkToQueue(result, parentUri, linkUri, anchor, isDoFollow, endCallback) {
+function addLinkToQueue(result, parentUrl, linkUri, anchor, isDoFollow, endCallback) {
 
     async.waterfall([
         function(callback) {
-            updateDepth(parentUri, linkUri, function(error, currentDepth) {
+            updateDepth(parentUrl, linkUri, function(error, currentDepth) {
                 callback(error,currentDepth);
             });
 
         },
         function(currentDepth, callback) {
-          isAGoodLinkToCrawl(result, currentDepth, parentUri, linkUri, anchor, isDoFollow, function(error, info) {
+          isAGoodLinkToCrawl(result, currentDepth, parentUrl, linkUri, anchor, isDoFollow, function(error, info) {
 
               if (error) {
                 return callback(error);
@@ -647,7 +647,7 @@ function addLinkToQueue(result, parentUri, linkUri, anchor, isDoFollow, endCallb
               else {
                 log.info({"url" : linkUri, "step" : "addLinkToQueue", "message" : "Don't crawl the url",
                           "options" : {isGoogLink : info.toCrawl, depthLimit : result.depthLimit, currentDepth : currentDepth }});
-                pm.unCrawl(parentUri, linkUri, anchor, isDoFollow, callback);
+                pm.unCrawl(parentUrl, linkUri, anchor, isDoFollow, callback);
               }
 
           });
@@ -668,9 +668,9 @@ function addLinkToQueue(result, parentUri, linkUri, anchor, isDoFollow, endCallb
  * @param true if the link is in dofollow
  * @param callback(error)
  */
-function isAGoodLinkToCrawl(result, currentDepth, parentUri, link, anchor, isDoFollow, callback) {
+function isAGoodLinkToCrawl(result, currentDepth, parentUrl, link, anchor, isDoFollow, callback) {
 
-  store.getStore().isStartFromUrl(parentUri, link, function(error, startFrom){
+  store.getStore().isStartFromUrl(parentUrl, link, function(error, startFrom){
 
         // 1. Check if we need to crawl other hosts
         if (startFrom.link.isStartFromDomain && ! startFrom.link.isStartFromHost && ! result.externalHosts) {
@@ -687,7 +687,7 @@ function isAGoodLinkToCrawl(result, currentDepth, parentUri, link, anchor, isDoF
 
         // 3. Check if we need to crawl only the first pages of external hosts/domains
         if (result.firstExternalLinkOnly &&  ((! startFrom.link.isStartFromHost) || (! startFrom.link.isStartFromDomains))) {
-          if (! startFrom.parentUri.isStartFromHost) {
+          if (! startFrom.parentUrl.isStartFromHost) {
             log.warn({"url" : link, "step" : "isAGoodLinkToCrawl", "message" : "Don't crawl url - External link and not the first link)"});
             return callback(null, {toCrawl : false, isExternal : ! startFrom.link.isStartFromDomain});
           }
@@ -719,7 +719,7 @@ function isAGoodLinkToCrawl(result, currentDepth, parentUri, link, anchor, isDoF
           return callback(null, {toCrawl : true, isExternal : ! startFrom.link.isStartFromDomain });
         }
         // TODO : asynch this function ?
-        var check =  result.canCrawl(parentUri, link, anchor, isDoFollow);
+        var check =  result.canCrawl(parentUrl, link, anchor, isDoFollow);
         log.debug({"url" : link, "step" : "isAGoodLinkToCrawl", "message" : "method options.canCrawl has been called and return "} + check);
         return callback(null, {toCrawl : check, isExternal : ! startFrom.link.isStartFromDomain});
 
@@ -758,9 +758,9 @@ function unregisterPlugin(plugin) {
  * @param callback(error, depth)
  *
  */
-function updateDepth(parentUri, linkUri, callback) {
+function updateDepth(parentUrl, linkUri, callback) {
 
-    var depths = {parentUri : parentUri, linkUri : linkUri, parentDepth : 0, linkDepth : 0};
+    var depths = {parentUrl : parentUrl, linkUri : linkUri, parentDepth : 0, linkDepth : 0};
     var execFns = async.seq(getDepths , calcultateDepths , saveDepths);
 
     execFns(depths, function (error, result) {
@@ -777,13 +777,13 @@ function updateDepth(parentUri, linkUri, callback) {
  *
  *
  * @param a structure containing both url
- *        {parentUri : parentUri, linkUri : linkUri}
+ *        {parentUrl : parentUrl, linkUri : linkUri}
  * @param callback(error, depth)
  */
 function getDepths(depths, callback) {
 
     async.parallel([
-        async.apply(store.getStore().getDepth.bind(store.getStore()), depths.parentUri),
+        async.apply(store.getStore().getDepth.bind(store.getStore()), depths.parentUrl),
         async.apply(store.getStore().getDepth.bind(store.getStore()), depths.linkUri)
     ],
     function(error, results){
@@ -801,7 +801,7 @@ function getDepths(depths, callback) {
  *
  *
  * @param a structure containing both url
- *        {parentUri : parentUri, linkUri : linkUri}
+ *        {parentUrl : parentUrl, linkUri : linkUri}
  * @param callback(error, depth)
  */
 
@@ -825,13 +825,13 @@ function calcultateDepths(depths, callback) {
  *
  *
  * @param a structure containing both url
- *        {parentUri : parentUri, linkUri : linkUri}
+ *        {parentUrl : parentUrl, linkUri : linkUri}
  * @param callback(error, depth)
  */
 function saveDepths(depths, callback) {
 
   async.parallel([
-      async.apply(store.getStore().setDepth.bind(store.getStore()), depths.parentUri, depths.parentDepth ),
+      async.apply(store.getStore().setDepth.bind(store.getStore()), depths.parentUrl, depths.parentDepth ),
       async.apply(store.getStore().setDepth.bind(store.getStore()), depths.linkUri, depths.linkDepth )
   ],
   function(error){

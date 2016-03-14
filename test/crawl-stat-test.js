@@ -134,7 +134,7 @@ describe('Stat Plugin', function() {
 
             };
             crawler.init({
-               canCrawl : function(parentUri, link, anchor, isDoFollow) {
+               canCrawl : function(parentUrl, link, anchor, isDoFollow) {
                             return isDoFollow;
                           }
                },

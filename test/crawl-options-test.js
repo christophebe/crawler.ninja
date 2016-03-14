@@ -112,7 +112,7 @@ describe('Crawl Option tests', function() {
 
             crawler.queue({url :"http://localhost:9999/page7.html",
                      userAgent : "dummyBot",
-                     canCrawl : function (parentUri, link, anchor, isDoFollow){
+                     canCrawl : function (parentUrl, link, anchor, isDoFollow){
                                     if (link === "http://localhost:9999/page9.html") {
                                       ok = true;
                                     }
