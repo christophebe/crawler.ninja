@@ -515,3 +515,4 @@ ChangeLog
 - Code refactoring : rename parentUri by parentUrl.
 - Invalid output in the console plugin : the http method was not correctly displayed.
 - Add more info in the README for https sites that do not support TLS 1.2+
+- Now, it is possible to use all http request params in the crawler options.
