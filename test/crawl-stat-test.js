@@ -14,9 +14,9 @@ describe('Stat Plugin', function() {
         it('should return only one page stat', function(done) {
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
-                assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 1);
-                assert(stat.data.numberOfHTMLs == 1, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.contentTypes['text/html; charset=UTF-8'] === 1);
+                assert(stat.data.numberOfHTMLs === 1, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 //c.removeAllListeners(["crawl"]);
                 done();
 
@@ -33,9 +33,9 @@ describe('Stat Plugin', function() {
         it('should return only one page stat for an HTML page without tag', function(done) {
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
                 //assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 1);
-                assert(stat.data.numberOfHTMLs == 0, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfHTMLs === 0, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 done();
 
             };
@@ -51,9 +51,9 @@ describe('Stat Plugin', function() {
         it('should return only one page stat for a text page', function(done) {
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
-                assert(stat.data.contentTypes['text/plain; charset=UTF-8'] == 1);
-                assert(stat.data.numberOfHTMLs == 0, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.contentTypes['text/plain; charset=UTF-8'] === 1);
+                assert(stat.data.numberOfHTMLs === 0, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 done();
 
             };
@@ -69,9 +69,9 @@ describe('Stat Plugin', function() {
 
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 8, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
-                assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 6, "Incorrect number of HTML content type");
-                assert(stat.data.numberOfHTMLs == 6, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfUrls === 8, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.contentTypes['text/html; charset=UTF-8'] === 6, "Incorrect number of HTML content type");
+                assert(stat.data.numberOfHTMLs === 6, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 done();
 
             };
@@ -89,9 +89,9 @@ describe('Stat Plugin', function() {
 
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
-                assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 1, "Incorrect number of HTML content type");
-                assert(stat.data.numberOfHTMLs == 1, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.contentTypes['text/html; charset=UTF-8'] === 1, "Incorrect number of HTML content type");
+                assert(stat.data.numberOfHTMLs === 1, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 done();
 
             };
@@ -109,9 +109,9 @@ describe('Stat Plugin', function() {
 
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 4, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
-                assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 4, "Incorrect number of HTML content type");
-                assert(stat.data.numberOfHTMLs == 4, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfUrls === 4, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.contentTypes['text/html; charset=UTF-8'] === 4, "Incorrect number of HTML content type");
+                assert(stat.data.numberOfHTMLs === 4, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 done();
 
             };
@@ -127,9 +127,9 @@ describe('Stat Plugin', function() {
         it('should return only dofollow pages stat', function(done) {
             var end = function(){
 
-                assert(stat.data.numberOfUrls == 6, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
-                assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 5, "Incorrect number of HTML content type");
-                assert(stat.data.numberOfHTMLs == 5, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                assert(stat.data.numberOfUrls === 6, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                assert(stat.data.contentTypes['text/html; charset=UTF-8'] === 5, "Incorrect number of HTML content type");
+                assert(stat.data.numberOfHTMLs === 5, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
                 done();
 
             };

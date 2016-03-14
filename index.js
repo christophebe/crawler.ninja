@@ -61,7 +61,7 @@ var DEFAULT_QUEUE_MODULE = "./async-queue.js";
    * @param options used to customize the crawler.
    *
    *  The current options attributes are :
-   *  - skipDuplicates        : if true skips URIs that were already crawled - default is true
+   *  - skipDuplicates        : if true skips URLs that were already crawled - default is true
    *  - maxConnections        : the number of connections used to crawl - default is 5
    *  - rateLimits            : number of milliseconds to delay between each requests (Default 0).
    *                            Note that this option will force crawler to use only one connection
@@ -184,12 +184,12 @@ var DEFAULT_QUEUE_MODULE = "./async-queue.js";
 
     // if String, we expect to receive an url
     if (_.isString(options)) {
-      addInQueue(addDefaultOptions({uri:options, url:options}, globalOptions));
+      addInQueue(addDefaultOptions({url:options}, globalOptions));
     }
     // Last possibility, this is a json
     else {
 
-      if (! _.has(options, "url") && ! _.has(options, "uri")) {
+      if (! _.has(options, "url") && ! _.has(options, "url")) {
 
             crawl({errorCode : "NO_URL_OPTION"}, {method:"GET", url : "unknown", proxy : "", error : true},
                   function(error){
@@ -215,14 +215,14 @@ var DEFAULT_QUEUE_MODULE = "./async-queue.js";
 function addInQueue(options) {
 
   //TODO : review this code with async
-  http.resolveRedirection(_.has(options, "url") ? options.url : options.uri, function(error, targetUrl){
-    store.getStore().addStartUrls([targetUrl, _.has(options, "url") ? options.url : options.uri], function(error) {
+  http.resolveRedirection(options, function(error, targetUrl){
+    store.getStore().addStartUrls([targetUrl, options.url], function(error) {
         requestQueue.queue(options, function(error){
           log.debug({"url" : options.url, "step" : "addInQueue", "message" : "Url correctly added in the queue"});
           if (requestQueue.idle()){
             endCallback();
           }
-        });         
+        });
     });
   });
 
@@ -259,7 +259,7 @@ function addInQueue(options) {
 
     // Copy only options attributes that are in the options used for the previous request
     // Could be more simple ? ;-)
-    o =  _.extend(o, _.pick(options, _.without(_.keys(o), "url", "uri")));
+    o =  _.extend(o, _.pick(options, _.without(_.keys(o), "url")));
     o.depthLimit = options.depthLimit;
     o.currentRetries = 0;
 
@@ -309,7 +309,6 @@ function createDefaultOptions(url) {
 
   if (url) {
     options.url = url;
-    options.uri = url;
   }
 
   return options;
@@ -372,7 +371,7 @@ function applyRedirect(result, callback) {
   // if 30* & followRedirect = false => chain 30*
   if (result.statusCode >= 300 && result.statusCode <= 399  &&  ! result.followRedirect) {
 
-      var from = result.uri;
+      var from = result.url;
       var to = URI.linkToURI(from, result.headers.location);
 
       // Send the redirect info to the plugins &
@@ -445,7 +444,7 @@ function crawlHrefs(result, $, endCallback) {
 function crawlHref($,result, a, callback) {
 
       var link = $(a).attr('href');
-      var parentUri = result.uri;
+      var parentUri = result.url;
       if (link) {
 
         var anchor = $(a).text() ? $(a).text() : "";
@@ -498,7 +497,7 @@ function crawlLinks(result, $, endCallback) {
  */
 function crawLink($,result,linkTag, callback) {
       var link = $(linkTag).attr('href');
-      var parentUri = result.uri;
+      var parentUri = result.url;
 
       if (link) {
 
@@ -553,7 +552,7 @@ function crawlScripts(result, $, endCallback) {
 function crawlScript($,result, script, callback) {
 
     var link = $(script).attr('src');
-    var parentUri = result.uri;
+    var parentUri = result.url;
 
     if (link) {
           var linkUri = URI.linkToURI(parentUri, link);
@@ -599,7 +598,7 @@ function crawlImages(result, $, endCallback) {
  * @param callback()
  */
 function crawlImage ($,result, img, callback) {
-      var parentUri = result.uri;
+      var parentUri = result.url;
 
       var link = $(img).attr('src');
       var alt = $(img).attr('alt');

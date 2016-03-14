@@ -7,12 +7,12 @@ function Plugin() {
  * Function triggers when an Http error occurs for request made by the crawler
  *
  * @param the http error
- * @param the http resource object (contains the uri of the resource)
+ * @param the http resource object (contains the url of the resource)
  * @param callback(error)
  */
 Plugin.prototype.error = function (error, result, callback) {
 
-}
+};
 
 /**
  * Function triggers when an html resource is crawled
@@ -24,7 +24,7 @@ Plugin.prototype.error = function (error, result, callback) {
  */
 Plugin.prototype.crawl = function(result, $, callback) {
 
-}
+};
 
 /**
  * Function triggers when the crawler found a link on a page
@@ -38,7 +38,7 @@ Plugin.prototype.crawl = function(result, $, callback) {
 Plugin.prototype.crawlLink = function(page, link, anchor, isDoFollow, callback) {
 
 
-}
+};
 
 /**
  * Function triggers when the crawler found an image on a page
@@ -52,7 +52,7 @@ Plugin.prototype.crawlLink = function(page, link, anchor, isDoFollow, callback) 
 Plugin.prototype.crawlImage = function(page, link, alt, callback) {
 
 
-}
+};
 
 /**
  * Function triggers when the crawler found an HTTP redirect
@@ -64,7 +64,7 @@ Plugin.prototype.crawlImage = function(page, link, alt, callback) {
  */
 Plugin.prototype.crawlRedirect = function(from, to, statusCode, callback) {
 
-}
+};
 
 /**
  * Function triggers when a link is not crawled (depending on the crawler setting)
@@ -78,6 +78,6 @@ Plugin.prototype.crawlRedirect = function(from, to, statusCode, callback) {
  */
 Plugin.prototype.unCrawl = function(page, link, anchor, isDoFollow, endCallback) {
 
-}
+};
 
 module.exports.Plugin = Plugin;

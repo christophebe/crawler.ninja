@@ -12,21 +12,21 @@ function Plugin(crawler) {
 
 Plugin.prototype.crawl = function(result, $, callback) {
       console.log(result.statusCode + ',' + result.method + ',' +
-                  result.uri + ',' + result.responseTime + ',' + (result.proxy ? result.proxy : "no-proxy") );
+                  result.url + ',' + result.responseTime + ',' + (result.proxy ? result.proxy : "no-proxy") );
       callback();
-}
+}; 
 
 Plugin.prototype.error = function(error, result, callback) {
 
      console.log(error.code + ',ERROR,' +
-                 result.uri + ',no-response-time,' + (result.proxy ? result.proxy : "no-proxy"));
+                 result.url + ',no-response-time,' + (result.proxy ? result.proxy : "no-proxy"));
      callback();
 
 };
 
 Plugin.prototype.recrawl = function(error, result, callback) {
      console.log(error.code + ',RECRAWL(' + result.currentRetries + '),' +
-                 result.uri + ',no-response-time,' + (result.proxy ? result.proxy : "no-proxy") + " delay:" + result.retryTimeout);
+                 result.url + ',no-response-time,' + (result.proxy ? result.proxy : "no-proxy") + " delay:" + result.retryTimeout);
      callback();
 
 };

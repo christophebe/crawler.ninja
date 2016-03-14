@@ -33,18 +33,18 @@ function Plugin() {
 }
 
 Plugin.prototype.error = function (error, result, callback) {
-        this.errors.add({uri : result.uri, error : error});
-        if (error.code == ERROR_CODE_TIMEOUT) {
-          var resourceInfo = this.getresourceInfo(result.uri);
+        this.errors.add({url : result.url, error : error});
+        if (error.code === ERROR_CODE_TIMEOUT) {
+          var resourceInfo = this.getresourceInfo(result.url);
           resourceInfo.statusCode = 408;
         }
-        if (error.code == ERROR_DNS_LOOKUP) {
-          var resourceInfo = this.getresourceInfo(result.uri);
+        if (error.code === ERROR_DNS_LOOKUP) {
+          var resourceInfo = this.getresourceInfo(result.url);
           resourceInfo.statusCode = STATUS_DNS_LOOKUP_ERROR;
         }
 
         callback();
-}
+};
 
 
 /**
@@ -77,7 +77,7 @@ Plugin.prototype.crawl = function(result, $, callback) {
       callback();
 
 
-}
+};
 
 /**
  * Analyze resources & store the infos into the audit maps
@@ -88,7 +88,7 @@ Plugin.prototype.crawl = function(result, $, callback) {
  */
 Plugin.prototype.analyzeResource = function(result, $) {
 
-    var resourceInfo = this.getresourceInfo(result.uri);
+    var resourceInfo = this.getresourceInfo(result.url);
 
     resourceInfo.statusCode = result.statusCode;
     resourceInfo.responseTime = result.responseTime;
@@ -114,7 +114,7 @@ Plugin.prototype.analyzeResource = function(result, $) {
         resourceInfo.keywordsLen = ! resourceInfo.keywords ? 0 : resourceInfo.keywords.length;
 
         var refresh = $('meta[http-equiv=Refresh]').attr("content");
-        resourceInfo.refresh = ! refresh ? "" : refresh
+        resourceInfo.refresh = ! refresh ? "" : refresh;
 
         var canonicalLink = $('link[rel=canonical]').attr("href");
         resourceInfo.canonicalLink = ! canonicalLink ? "" : canonicalLink;
@@ -128,11 +128,11 @@ Plugin.prototype.analyzeResource = function(result, $) {
         var shasum = crypto.createHash('sha1');
         shasum.update(result.body);
         resourceInfo.hash = shasum.digest('hex');
-        this.addHash(result.uri,resourceInfo.hash);
+        this.addHash(result.url,resourceInfo.hash);
     }
 
-    this.resources.set(result.uri, resourceInfo);
-}
+    this.resources.set(result.url, resourceInfo);
+};
 
 /**
  * Analyze redirect & store info into the audit maps
@@ -142,7 +142,7 @@ Plugin.prototype.analyzeResource = function(result, $) {
  */
 Plugin.prototype.analyzeRedirect = function(result) {
 
-    var resourceInfo = this.getresourceInfo(result.uri);
+    var resourceInfo = this.getresourceInfo(result.url);
 
     resourceInfo.statusCode = result.statusCode;
     resourceInfo.responseTime = result.responseTime;
@@ -153,25 +153,25 @@ Plugin.prototype.analyzeRedirect = function(result) {
     // last modified & other header attributes
     resourceInfo.headers = result.headers;
 
-    this.resources.set(result.uri, resourceInfo);
+    this.resources.set(result.url, resourceInfo);
 
-    addToListMap(this.outLinks, result.uri, {page: result.headers["location"], anchor : 'Redirect', isDoFollow : true});
-}
+    addToListMap(this.outLinks, result.url, {page: result.headers["location"], anchor : 'Redirect', isDoFollow : true});
+};
 
 
 
 Plugin.prototype.analyzeHttpError = function(result) {
 
-    var resourceInfo = this.getresourceInfo(result.uri);
+    var resourceInfo = this.getresourceInfo(result.url);
 
     resourceInfo.statusCode = result.statusCode;
     resourceInfo.responseTime = result.responseTime;
 
     resourceInfo.headers = result.headers;
 
-    this.resources.set(result.uri, resourceInfo);
+    this.resources.set(result.url, resourceInfo);
 
-}
+};
 
 /**
  * Callback for the event crawlink. Triggers when the crawler found a link
@@ -192,14 +192,14 @@ Plugin.prototype.crawlLink = function(page, link, anchor, isDoFollow, callback) 
     addToListMap(this.inLinks, link, {page: page, anchor : anchor, isDoFollow : isDoFollow});
 
     // External links
-    if (URI.host(page) != URI.host(link)) {
+    if (URI.host(page) !== URI.host(link)) {
 
         addToListMap(this.externalLinks, link, page);
     }
 
     callback();
 
-}
+};
 
 /**
  * Callback for the event crawimage. Triggers when the crawler found a image
@@ -217,13 +217,13 @@ Plugin.prototype.crawlImage = function(page, link, alt, callback) {
     addToListMap(this.outLinks, page, {page: link, anchor : alt, isDoFollow : null});
 
     // Don't add external images
-    if (URI.host(page) == URI.host(link)) {
+    if (URI.host(page) === URI.host(link)) {
       addToListMap(this.images, link, {page: page, alt : alt});
     }
 
     callback();
 
-}
+};
 
 /**
  * Add the redirect into a map in order to build the complete redirect chain
@@ -235,7 +235,7 @@ Plugin.prototype.crawlImage = function(page, link, alt, callback) {
 Plugin.prototype.crawlRedirect = function(from, to, statusCode, callback) {
     this.redirects.set(from, {'to': to, 'statusCode' : statusCode});
     callback();
-}
+};
 
 
 /**
@@ -259,12 +259,12 @@ Plugin.prototype.getresourceInfo = function(url) {
 
 	}
 
-}
+};
 
 /**
  * Add a hex representation of a page in the duplicateContents map
  *
- * @param the page uri
+ * @param the page url
  * @param the hex representation
  *
  */
@@ -296,7 +296,7 @@ Plugin.prototype.getNumberOfWords = function($) {
  * @returns an array of Hn tags with their text & len
  */
 Plugin.prototype.getHeaders = function($, headerTag) {
-	headers = [];
+	var headers = [];
 	$(headerTag).each(function(index,headerTag) {
 			var headerText = $(headerTag).text();
 			headers.push({"text" : headerText, "len" : headerText.length});
@@ -324,14 +324,16 @@ var addToListMap = function(map, key, value) {
 
       list = map.get(key);
 
-      if (!list)
+      if (!list) {
         list = [];
+      }
+
 
     }
     list.push(value);
     map.set(key, list);
 
-}
+};
 
 
 module.exports.Plugin = Plugin;

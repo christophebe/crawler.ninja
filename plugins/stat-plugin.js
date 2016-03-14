@@ -30,7 +30,7 @@ Plugin.prototype.unCrawl = function(parentUri, linkUri, anchor, isDoFollow, call
 
 Plugin.prototype.error = function(error, result, callback) {
 
-       self.data.errors.push(error);
+       this.data.errors.push(error);
        callback();
 };
 
@@ -49,7 +49,7 @@ Plugin.prototype.crawl = function(result, $, callback) {
       this.addContentType(contentType);
     }
 
-    this.addHostname(URI.host(result.uri));
+    this.addHostname(URI.host(result.url));
 
     if ($) {
         this.data.numberOfHTMLs++;
@@ -57,7 +57,7 @@ Plugin.prototype.crawl = function(result, $, callback) {
 
     callback();
 
-}
+};
 
 
 /**
@@ -71,7 +71,7 @@ Plugin.prototype.addContentType= function (contentType) {
    else {
      this.data.contentTypes[contentType]++;
    }
-}
+};
 
 
 /**
@@ -85,7 +85,7 @@ Plugin.prototype.addHostname= function (hostname) {
    else {
      this.data.hostnames[hostname]++;
    }
-}
+};
 
 
 module.exports.Plugin = Plugin;

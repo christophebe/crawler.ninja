@@ -70,7 +70,7 @@ function Plugin() {
  * Function triggers when an Http error occurs for request made by the crawler
  *
  * @param the http error
- * @param the http resource object (contains the uri of the resource)
+ * @param the http resource object (contains the url of the resource)
  * @param callback(error)
  */
 Plugin.prototype.error = function (error, result, callback) {
@@ -162,7 +162,7 @@ You can pass change/overide the default crawl options by using the init method.
 crawler.init({ scripts : false, links : false,images : false, ... }, function(){console.log("End of the crawl")});
 
 ```
-- skipDuplicates        : if true skips URIs that were already crawled, default is true.
+- skipDuplicates        : if true skips URLs that were already crawled, default is true.
 - userAgent             : String, defaults to "NinjaBot"
 - maxConnections        : the number of connections used to crawl, default is 5.
 - rateLimits            : number of milliseconds to delay between each requests , default = 0.
@@ -206,8 +206,8 @@ var options = {
 
   /**
    *  this callback is called for each link found in an html page
-   *  @param  : the uri of the page that contains the link
-   *  @param  : the uri of the link to check
+   *  @param  : the url of the page that contains the link
+   *  @param  : the url of the link to check
    *  @param  : the anchor text of the link
    *  @param  : true if the link is dofollow
    *  @return : true if the crawler can crawl the link on this html page
@@ -483,3 +483,15 @@ ChangeLog
 - Build a Redis Store (external module).
 - Add support for a more robust request queue. The current implementation is based on async.queue. Now, it is possible to replace this request queue by another one.
 - Build a Redis Job Queue (external module).
+
+0.2.1
+- minor bug fixs
+
+0.2.2
+- minor bug fixs
+
+0.2.3
+- minor bug fixs
+
+0.2.4
+- Code refactoring : remove the attribute uri. Use only url in the options object & functions.

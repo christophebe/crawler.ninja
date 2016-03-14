@@ -12,7 +12,7 @@ describe('Crawl Option tests', function() {
         it('Should returns an error for an empty options', function(done) {
             var end = function(){
 
-                assert(a.errors.toArray()[0].error.errorCode=="NO_OPTIONS");
+                assert(a.errors.toArray()[0].error.errorCode==="NO_OPTIONS");
                 done();
 
             };
@@ -28,7 +28,7 @@ describe('Crawl Option tests', function() {
 
             var end = function(){
 
-                assert(a.resources.get("http://localhost:9999/").statusCode ==200);
+                assert(a.resources.get("http://localhost:9999/").statusCode === 200);
                 done();
 
             };
@@ -41,9 +41,9 @@ describe('Crawl Option tests', function() {
         });
 
         it('Should returns a ressource with an option as a json object', function(done) {
-            end = function(){
+            var end = function(){
 
-                assert(a.resources.get("http://localhost:9999/").statusCode ==200);
+                assert(a.resources.get("http://localhost:9999/").statusCode === 200);
                 done();
 
             };
@@ -62,7 +62,7 @@ describe('Crawl Option tests', function() {
 
             var end = function(){
 
-                assert(a.errors.toArray()[0].error.errorCode=="NO_URL_OPTION");
+                assert(a.errors.toArray()[0].error.errorCode  === "NO_URL_OPTION");
                 done();
 
             };
@@ -79,8 +79,8 @@ describe('Crawl Option tests', function() {
 
             var end = function(){
 
-                assert(a.resources.get("http://localhost:9999/page6.html").statusCode ==200);
-                assert(a.resources.get("http://localhost:9999/").statusCode ==200);
+                assert(a.resources.get("http://localhost:9999/page6.html").statusCode === 200);
+                assert(a.resources.get("http://localhost:9999/").statusCode === 200);
                 done();
 
             };
@@ -110,10 +110,10 @@ describe('Crawl Option tests', function() {
 
             var ok = false;
 
-            crawler.queue({uri :"http://localhost:9999/page7.html",
+            crawler.queue({url :"http://localhost:9999/page7.html",
                      userAgent : "dummyBot",
                      canCrawl : function (parentUri, link, anchor, isDoFollow){
-                                    if (link == "http://localhost:9999/page9.html") {
+                                    if (link === "http://localhost:9999/page9.html") {
                                       ok = true;
                                     }
                                     return true;
@@ -128,7 +128,7 @@ describe('Crawl Option tests', function() {
         it('Should recrawl url with 404', function(done) {
 
             var end = function(){
-                assert(a.resources.get("http://localhost:9999/notfound").statusCode == 200);
+                assert(a.resources.get("http://localhost:9999/notfound").statusCode === 200);
                 assert(! a.resources.get("http://localhost:9999/notfound-2"));
 
                 done();
