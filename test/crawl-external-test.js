@@ -73,7 +73,7 @@ describe('External Links', function() {
         });
 
         it.skip('Should crawl a https site with a old config', function(done) {
-            this.timeout(30000);
+            this.timeout(3000000);
             var end = function(){
                 //assert(audit.resources.toArray().length === 0);
                 //assert(audit.errors.toArray()[0].error.code === "DOMAINBLACKLIST");
@@ -85,10 +85,10 @@ describe('External Links', function() {
             };
 
             crawler.init(options, end);
-            var log = new cs.Plugin();
-            crawler.registerPlugin(log);
+            var console = new cs.Plugin();
+            crawler.registerPlugin(console);
 
-            crawler.queue({url : "https://www.notaire.be/"}); //https://www.notaire.be/
+            crawler.queue({url : "https://www.notaire.be"}); //https://www.notaire.be/
 
         });
 

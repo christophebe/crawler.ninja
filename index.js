@@ -255,11 +255,19 @@ function addInQueue(options) {
  */
  function buildNewOptions (options, newUrl) {
 
+    // Old method
+    /*
     var o = createDefaultOptions(newUrl);
 
     // Copy only options attributes that are in the options used for the previous request
     // Could be more simple ? ;-)
+
     o =  _.extend(o, _.pick(options, _.without(_.keys(o), "url")));
+    */
+    var o = _.clone(options);
+    o.url = newUrl;
+
+
     o.depthLimit = options.depthLimit;
     o.currentRetries = 0;
 

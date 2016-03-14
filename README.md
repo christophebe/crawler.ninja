@@ -344,9 +344,26 @@ var options = {
   rateLimits : 200 //200ms between each request
 
 };
-
-
 ```
+
+Common issues
+--------------
+
+### Crawling https sites
+
+With the default crawl options, it is possible to get errors like timeouts on some https sites. This happens with sites that do not support TLS 1.2+ .
+You can check the HTTPS infos for you site with : https://www.ssllabs.com/ssltest/
+
+In order to crawl those sites, you have to add the following parameters in the crawl options :
+
+```javascript
+var options = {
+    secureOptions : require('constants').SSL_OP_NO_TLSv1_2,
+    rejectUnauthorized : false
+};
+```
+
+We will try to integrate this kind of exception in the crawler code for an upcoming release.
 
 The Crawl Store
 ---------------
@@ -497,3 +514,4 @@ ChangeLog
 - Code refactoring : remove the attribute uri. Use only url in the options object & functions.
 - Code refactoring : rename parentUri by parentUrl.
 - Invalid output in the console plugin : the http method was not correctly displayed.
+- Add more info in the README for https sites that do not support TLS 1.2+
