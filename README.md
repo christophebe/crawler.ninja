@@ -495,3 +495,4 @@ ChangeLog
 
 0.2.4
 - Code refactoring : remove the attribute uri. Use only url in the options object & functions.
+- Code refactoring : rename parentUri by parentUrl.

@@ -11,10 +11,10 @@ function Plugin(crawler) {
 
 
 Plugin.prototype.crawl = function(result, $, callback) {
-      console.log(result.statusCode + ',' + result.method + ',' +
+      console.log(result.statusCode + ',' + "GET" + ',' +
                   result.url + ',' + result.responseTime + ',' + (result.proxy ? result.proxy : "no-proxy") );
       callback();
-}; 
+};
 
 Plugin.prototype.error = function(error, result, callback) {
 

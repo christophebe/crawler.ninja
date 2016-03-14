@@ -14,7 +14,7 @@ describe('Audit Plugin Basic tests', function() {
         it('Should return an error for an invalid site', function(done) {
             var audit = new seoaudit.Plugin();
             var end = function(){
-                assert(audit.errors.length == 2);
+                assert(audit.errors.length === 2);
                 done();
 
             };
@@ -31,9 +31,9 @@ describe('Audit Plugin Basic tests', function() {
 
             var end = function() {
               var resource = audit.resources.get("http://localhost:9999/redirect");
-              assert(resource.statusCode==301);
+              assert(resource.statusCode===301);
               var pageDest = audit.outLinks.get("http://localhost:9999/redirect")[0].page;
-              assert( pageDest == "/page2.html", "invalide destination page for the redirect : " + pageDest );
+              assert( pageDest === "/page2.html", "invalide destination page for the redirect : " + pageDest );
 
               done();
 
@@ -53,16 +53,16 @@ describe('Audit Plugin Basic tests', function() {
             var end = function(){
 
                 var resource = audit.resources.get("http://localhost:9999/redirect1");
-                assert(resource.statusCode==301);
+                assert(resource.statusCode===301);
 
                 resource = audit.resources.get("http://localhost:9999/redirect2");
-                assert(resource.statusCode==302);
-                assert(audit.redirects.get("http://localhost:9999/redirect1").to == "http://localhost:9999/redirect2");
-                assert(audit.redirects.get("http://localhost:9999/redirect1").statusCode == 301);
-                assert(audit.redirects.get("http://localhost:9999/redirect2").to == "http://localhost:9999/redirect3");
-                assert(audit.redirects.get("http://localhost:9999/redirect2").statusCode == 302);
-                assert(audit.redirects.get("http://localhost:9999/redirect3").to == "http://localhost:9999/index.html");
-                assert(audit.redirects.get("http://localhost:9999/redirect3").statusCode == 301);
+                assert(resource.statusCode===302);
+                assert(audit.redirects.get("http://localhost:9999/redirect1").to === "http://localhost:9999/redirect2");
+                assert(audit.redirects.get("http://localhost:9999/redirect1").statusCode === 301);
+                assert(audit.redirects.get("http://localhost:9999/redirect2").to === "http://localhost:9999/redirect3");
+                assert(audit.redirects.get("http://localhost:9999/redirect2").statusCode === 302);
+                assert(audit.redirects.get("http://localhost:9999/redirect3").to === "http://localhost:9999/index.html");
+                assert(audit.redirects.get("http://localhost:9999/redirect3").statusCode === 301);
                 done();
 
             };
@@ -78,7 +78,7 @@ describe('Audit Plugin Basic tests', function() {
             var end = function(){
 
                 var resource = audit.resources.get("http://localhost:9999/index.html");
-                assert(resource.statusCode==200);
+                assert(resource.statusCode===200);
 
                 assert(audit.redirects.keys = []);
 
@@ -99,7 +99,7 @@ describe('Audit Plugin Basic tests', function() {
             //var cons = new cs.Plugin();
             var end = function(){
                 var resource = audit.resources.get("http://localhost:9999/200x200-image.jpg");
-                assert(resource.contentType =='image/jpeg');
+                assert(resource.contentType ==='image/jpeg');
 
                 done();
 
@@ -120,9 +120,9 @@ describe('Audit Plugin Basic tests', function() {
             var end = function(){
 
                 var resource = audit.resources.get("http://localhost:9999/404-test.html");
-                assert(resource.statusCode==404);
-                assert(audit.outLinks.get("http://localhost:9999/page3.html")[0].page == "http://localhost:9999/404-test.html");
-                assert(audit.inLinks.get("http://localhost:9999/404-test.html")[0].page == "http://localhost:9999/page3.html");
+                assert(resource.statusCode===404);
+                assert(audit.outLinks.get("http://localhost:9999/page3.html")[0].page === "http://localhost:9999/404-test.html");
+                assert(audit.inLinks.get("http://localhost:9999/404-test.html")[0].page === "http://localhost:9999/page3.html");
 
                 done();
 
@@ -144,9 +144,9 @@ describe('Audit Plugin Basic tests', function() {
 
                 var resource = audit.resources.get("http://localhost:9999/internal-error");
 
-                assert(resource.statusCode==500);
-                assert(audit.outLinks.get("http://localhost:9999/page3.html")[1].page == "http://localhost:9999/internal-error");
-                assert(audit.inLinks.get("http://localhost:9999/internal-error")[0].page == "http://localhost:9999/page3.html");
+                assert(resource.statusCode===500);
+                assert(audit.outLinks.get("http://localhost:9999/page3.html")[1].page === "http://localhost:9999/internal-error");
+                assert(audit.inLinks.get("http://localhost:9999/internal-error")[0].page === "http://localhost:9999/page3.html");
 
                 done();
 
@@ -165,10 +165,10 @@ describe('Audit Plugin Basic tests', function() {
 
                 var resource = audit.resources.get("http://www.thisnotcorrect.abc/");
 
-                assert(resource.statusCode == "DNS lookup failed");
-                assert(audit.outLinks.get("http://localhost:9999/page5.html")[0].page == "http://www.thisnotcorrect.abc/");
-                assert(audit.outLinks.get("http://localhost:9999/page5.html")[1].page == "http://localhost:9999/");
-                assert(audit.inLinks.get("http://www.thisnotcorrect.abc/")[0].page == "http://localhost:9999/page5.html");
+                assert(resource.statusCode === "DNS lookup failed");
+                assert(audit.outLinks.get("http://localhost:9999/page5.html")[0].page === "http://www.thisnotcorrect.abc/");
+                assert(audit.outLinks.get("http://localhost:9999/page5.html")[1].page === "http://localhost:9999/");
+                assert(audit.inLinks.get("http://www.thisnotcorrect.abc/")[0].page === "http://localhost:9999/page5.html");
 
                 done();
 
