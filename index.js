@@ -14,6 +14,7 @@ var domainBlackList  = require("./default-lists/domain-black-list.js").list();
 var suffixBlackList  = require("./default-lists/suffix-black-list.js").list();
 
 var DEFAULT_NUMBER_OF_CONNECTIONS = 5;
+var DEFAULT_JAR = true;
 var DEFAULT_DEPTH_LIMIT = -1; // no limit
 var DEFAULT_TIME_OUT = 20000;
 var DEFAULT_RETRIES = 3;
@@ -31,13 +32,10 @@ var DEFAULT_CRAWL_IMAGES = true;
 
 var DEFAULT_PROTOCOLS_TO_CRAWL = ["http", "https"];
 
-// The Http request doesn't follow redirect
-// in order to catch/log/manage them in some plugins
 var DEFAULT_FOLLOW_301 = false;
 
 var DEFAULT_LINKS_TYPES = ["canonical", "stylesheet", "icon"];
 var DEFAULT_USER_AGENT = "NinjaBot";
-var DEFAULT_CACHE = false;
 var DEFAULT_REFERER = false;
 
 var DEFAULT_STORE_MODULE = "./memory-store.js";
@@ -48,7 +46,7 @@ var DEFAULT_QUEUE_MODULE = "./async-queue.js";
 
   var globalOptions = {};
 
-  // assign the default updateDepth method used to calculate the crawl depth
+  // assign the default updateDepth function used to calculate the crawl depth
   var updateDepthFn = updateDepth;
 
   var endCallback = null;
@@ -215,6 +213,7 @@ var DEFAULT_QUEUE_MODULE = "./async-queue.js";
 function addInQueue(options) {
 
   //TODO : review this code with async
+  /*
   http.resolveRedirection(options, function(error, targetUrl){
     store.getStore().addStartUrls([targetUrl, options.url], function(error) {
         requestQueue.queue(options, function(error){
@@ -224,6 +223,15 @@ function addInQueue(options) {
           }
         });
     });
+  });
+  */
+  store.getStore().addStartUrls([ options.url], function(error) {
+      requestQueue.queue(options, function(error){
+        log.debug({"url" : options.url, "step" : "addInQueue", "message" : "Url correctly added in the queue"});
+        if (requestQueue.idle()){
+          endCallback();
+        }
+      });
   });
 
 
@@ -311,7 +319,8 @@ function createDefaultOptions(url) {
       retry400                : DEFAULT_RETRY_400,
       isExternal              : false,
       storeModuleName         : DEFAULT_STORE_MODULE,
-      queueModuleName         : DEFAULT_QUEUE_MODULE
+      queueModuleName         : DEFAULT_QUEUE_MODULE,
+      jar                     : DEFAULT_JAR
 
   };
 
@@ -380,7 +389,7 @@ function applyRedirect(result, callback) {
   if (result.statusCode >= 300 && result.statusCode <= 399  &&  ! result.followRedirect) {
 
       var from = result.url;
-      var to = URI.linkToURI(from, result.headers.location);
+      var to = URI.linkToURI(from, result.responseHeaders.location);
 
       // Send the redirect info to the plugins &
       // Add the link "to" the request queue
@@ -728,7 +737,7 @@ function isAGoodLinkToCrawl(result, currentDepth, parentUrl, link, anchor, isDoF
         }
         // TODO : asynch this function ?
         var check =  result.canCrawl(parentUrl, link, anchor, isDoFollow);
-        log.debug({"url" : link, "step" : "isAGoodLinkToCrawl", "message" : "method options.canCrawl has been called and return "} + check);
+        log.debug({"url" : link, "step" : "isAGoodLinkToCrawl", "message" : "function options.canCrawl has been called and return "} + check);
         return callback(null, {toCrawl : check, isExternal : ! startFrom.link.isStartFromDomain});
 
   });

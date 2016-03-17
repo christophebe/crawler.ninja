@@ -73,22 +73,26 @@ describe('External Links', function() {
         });
 
         it.skip('Should crawl a https site with a old config', function(done) {
-            this.timeout(3000000);
+            this.timeout(40000);
             var end = function(){
                 //assert(audit.resources.toArray().length === 0);
                 //assert(audit.errors.toArray()[0].error.code === "DOMAINBLACKLIST");
                 done();
             };
             var options = {
+                userAgent : 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0',
+                externalHosts : true,
                 secureOptions : require('constants').SSL_OP_NO_TLSv1_2,
                 rejectUnauthorized : false
+
             };
 
             crawler.init(options, end);
             var console = new cs.Plugin();
             crawler.registerPlugin(console);
 
-            crawler.queue({url : "https://www.notaire.be"}); //https://www.notaire.be/
+            crawler.queue({url : "https://www.notaire.be/" });
+
 
         });
 

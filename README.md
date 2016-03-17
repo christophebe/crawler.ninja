@@ -155,7 +155,7 @@ Option references
 
 ### The main crawler config options
 
-You can pass change/overide the default crawl options by using the init method.
+You can pass change/overide the default crawl options by using the init function.
 
 ```javascript
 
@@ -165,6 +165,7 @@ crawler.init({ scripts : false, links : false,images : false, ... }, function(){
 - skipDuplicates        : if true skips URLs that were already crawled, default is true.
 - userAgent             : String, defaults to "NinjaBot"
 - maxConnections        : the number of connections used to crawl, default is 5.
+- jar                   : If true, remember cookies for future use, default is true
 - rateLimits            : number of milliseconds to delay between each requests , default = 0.
 - externalDomains       : if true crawl external domains. This option can crawl a lot of different linked domains, default = false.
 - externalHosts         : if true crawl the others hosts on the same domain, default = false.
@@ -182,10 +183,10 @@ crawler.init({ scripts : false, links : false,images : false, ... }, function(){
 - referer               : String, if truthy sets the HTTP referer header
 - domainBlackList       : The list of domain names (without tld) to avoid to crawl (an array of String). The default list is in the file : /default-lists/domain-black-list.js
 - suffixBlackList       : The list of url suffice to avoid to crawl (an array of String). The default list is in the file : /default-lists/domain-black-list.js
-- method                : HTTP method used for crawling, default : GET.
 
 
-You can also use the [mikeal's request options](https://github.com/mikeal/request#requestoptions-callback) and will be directly passed to the request() method.
+
+You can also use the [mikeal's request options](https://github.com/mikeal/request#requestoptions-callback) and will be directly passed to the request() function.
 
 You can pass these options to the init() function if you want them to be global or as
 items in the queue() calls if you want them to be specific to that item (overwriting global options).
@@ -352,7 +353,7 @@ Common issues
 ### Crawling https sites
 
 With the default crawl options, it is possible to get errors like timeouts on some https sites. This happens with sites that do not support TLS 1.2+ .
-You can check the HTTPS infos for you site with : https://www.ssllabs.com/ssltest/
+You can check the HTTPS infos and the TLS compliant level for your site on : https://www.ssllabs.com/ssltest/
 
 In order to crawl those sites, you have to add the following parameters in the crawl options :
 
@@ -362,9 +363,20 @@ var options = {
     rejectUnauthorized : false
 };
 ```
-
 We will try to integrate this kind of exception in the crawler code for an upcoming release.
 
+### Starting the crawl with a redirect on a different subdomain
+
+If you start a crawl on http://wwww.mysite.com and if this url is redirecting to http://mysite.com, the crawl stop directly with the default options.
+
+Indeed, the default options doesn't crawl other hosts/subdomain on the same domain. You can use the option externalHosts to avoid this situation.
+
+```javascript
+var options = {
+    externalHosts : true
+};
+
+```
 The Crawl Store
 ---------------
 <add>doc!</add>
@@ -489,7 +501,7 @@ ChangeLog
 
 0.1.19
 - Add in the crawl json param "isExternal". By this way, a plugin can check if the link is external or not.
-- Add a new option "retry404" : some sites provide inconsistent response for some urls (status 404 instead of 200). In such case, it should be nice to retry (this issuee needs to be analyzed in more detail).
+- Add a new option "retry400" : some sites provide inconsistent response for some urls (status 404 instead of 200). In such case, it should be nice to retry (this issuee needs to be analyzed in more detail).
 
 0.1.20
 - Review the default domain blacklist.
@@ -516,3 +528,9 @@ ChangeLog
 - Invalid output in the console plugin : the http method was not correctly displayed.
 - Add more info in the README for https sites that do not support TLS 1.2+
 - Now, it is possible to use all http request params in the crawler options.
+
+0.2.5
+- Fix regression when crawling specific websites.
+- Review how to build the options for making http requests.
+- Add in the result of a request the response headers.
+- Better support for HTTP redirects (300+).

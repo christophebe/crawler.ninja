@@ -44,7 +44,7 @@ Plugin.prototype.crawl = function(result, $, callback) {
 
     this.data.numberOfUrls++;
 
-    var contentType = result.headers[CONTENT_TYPE_HEADER];
+    var contentType = result.responseHeaders[CONTENT_TYPE_HEADER];
     if (contentType) {
       this.addContentType(contentType);
     }

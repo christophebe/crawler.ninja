@@ -94,10 +94,10 @@ Plugin.prototype.analyzeResource = function(result, $) {
     resourceInfo.responseTime = result.responseTime;
 
     resourceInfo.size = result.body.length;
-    resourceInfo.contentType = result.headers["content-type"];
+    resourceInfo.contentType = result.responseHeaders["content-type"];
 
     // last modified & other header attributes
-    resourceInfo.headers = result.headers;
+    resourceInfo.responseHeaders = result.responseHeaders;
 
     // if HTML
     if ($) {
@@ -148,14 +148,14 @@ Plugin.prototype.analyzeRedirect = function(result) {
     resourceInfo.responseTime = result.responseTime;
 
     resourceInfo.size = result.body.length;
-    resourceInfo.contentType = result.headers["content-type"];
+    resourceInfo.contentType = result.responseHeaders["content-type"];
 
     // last modified & other header attributes
-    resourceInfo.headers = result.headers;
+    resourceInfo.responseHeaders = result.responseHeaders;
 
     this.resources.set(result.url, resourceInfo);
 
-    addToListMap(this.outLinks, result.url, {page: result.headers["location"], anchor : 'Redirect', isDoFollow : true});
+    addToListMap(this.outLinks, result.url, {page: result.responseHeaders["location"], anchor : 'Redirect', isDoFollow : true});
 };
 
 
@@ -167,7 +167,7 @@ Plugin.prototype.analyzeHttpError = function(result) {
     resourceInfo.statusCode = result.statusCode;
     resourceInfo.responseTime = result.responseTime;
 
-    resourceInfo.headers = result.headers;
+    resourceInfo.responseHeaders = result.responseHeaders;
 
     this.resources.set(result.url, resourceInfo);
 
