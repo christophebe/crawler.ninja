@@ -30,7 +30,7 @@ describe('Stat Plugin', function() {
         });
 
 
-        it('should return only one page stat for an HTML page without tag', function(done) {
+        it('should return zero HTML page  for a page without tag', function(done) {
             var end = function(){
 
                 assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
@@ -47,6 +47,56 @@ describe('Stat Plugin', function() {
 
         });
 
+        it('should return only one page stat for an HTML page without extension', function(done) {
+            var end = function(){
+
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                //assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 1);
+                assert(stat.data.numberOfHTMLs === 1, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                done();
+
+            };
+            crawler.init(null, end);
+            var stat = new memstat.Plugin();
+            crawler.registerPlugin(stat);
+
+            crawler.queue({url : "http://localhost:9999/index"});
+
+        });
+
+        it('should return zero html page without extension for a text file', function(done) {
+            var end = function(){
+
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                //assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 1);
+                assert(stat.data.numberOfHTMLs === 0, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                done();
+
+            };
+            crawler.init(null, end);
+            var stat = new memstat.Plugin();
+            crawler.registerPlugin(stat);
+
+            crawler.queue({url : "http://localhost:9999/text"});
+
+        });
+
+        it('should return zero html page for a image url without extension', function(done) {
+            var end = function(){
+
+                assert(stat.data.numberOfUrls === 1, "Incorrect number of crawled urls : " + stat.data.numberOfUrls);
+                //assert(stat.data.contentTypes['text/html; charset=UTF-8'] == 1);
+                assert(stat.data.numberOfHTMLs === 0, "Incorrect number of crawled HTML pages : " + stat.data.numberOfHTMLs);
+                done();
+
+            };
+            crawler.init(null, end);
+            var stat = new memstat.Plugin();
+            crawler.registerPlugin(stat);
+
+            crawler.queue({url : "http://localhost:9999/200x200-image"});
+
+        });
 
         it('should return only one page stat for a text page', function(done) {
             var end = function(){

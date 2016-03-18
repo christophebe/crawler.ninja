@@ -348,7 +348,7 @@ function crawl(error, result, callback) {
         return;
     }
 
-    var $ = html.isHTML(result.body) ? html.$(result.body) : null;
+    var $ =  html.$(result);
 
     // Analyse the HTTP response in order to check the content (links, images, ...)
     // or apply a redirect

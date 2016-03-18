@@ -534,3 +534,7 @@ ChangeLog
 - Review how to build the options for making http requests.
 - Add in the result of a request the response headers.
 - Better support for HTTP redirects (300+).
+
+0.2.6
+- Review how to analyze content in function of the response/content type.
+- Add unit tests for url containing special characters.
