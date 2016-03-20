@@ -76,6 +76,12 @@ site.get('/notfound-2', function(req, res) {
 
 });
 
+site.get('/buffer', function(req, res) {
+  res.send (new Buffer(600)); 
+
+});
+
+
 
 
 site.use(serveStatic(TEST_SITE_FOLDER));
