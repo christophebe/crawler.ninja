@@ -10,7 +10,7 @@
   "dependencies": {
     "async": " *",
     "cheerio": "*",
-    "collections": "*",
+    "collections": "<= 3.0.0",
     "crawler-ninja-logger": "*",
     "crawler-ninja-uri": "*",
     "crypto": "*",
